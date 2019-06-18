@@ -117,8 +117,10 @@ class MyCallbacks : public BLECharacteristicCallbacks
     }
     else if (msglength < 120 && msglength > 60)
     {
-      body1 = msgbody.substring(0, ss1);
-      body2 = msgbody.substring(ss1, ss2);
+      String body1tmp=msgbody.substring(0, ss1);
+      int splitspace1=body1tmp.lastIndexOf(" ");
+      body1 = msgbody.substring(0, splitspace1);
+      body2 = msgbody.substring(splitspace1);
       indexOfBody = 2;
     }
     else if (msglength < 60)
