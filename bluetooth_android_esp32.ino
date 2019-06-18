@@ -99,49 +99,68 @@ class MyCallbacks : public BLECharacteristicCallbacks
     int msglength = msgbody.length();
     Serial.print("msglength = ");
     Serial.println(msglength);
-    if (msglength < ss2 && msglength > ss3)
+    body1="";body2="";body3="";body4="";
+    if (msglength>ss4)msgbody= msgbody.substring(0,ss4-3)+"...";          //truncating if more than 240 character
+    if (msglength < ss4 && msglength > ss3)
     {
       String body1tmp = msgbody.substring(0, ss1);                         //0-60
       int splitspace1 = body1tmp.lastIndexOf(" ");                         //find index of last space char
       body1 = msgbody.substring(0, splitspace1);                           //cut 0-lastspace
+      if(body1.substring(0,1)==" ")body1=body1.substring(1);
       String body2tmp = msgbody.substring(splitspace1, splitspace1 + ss1); // cut last space - lastspace+60
       int splitspace2 = body2tmp.lastIndexOf(" ");
-      body2 = msgbody.substring(splitspace1, splitspace2);
+      body2 = msgbody.substring(splitspace1+1, splitspace1+ splitspace2);
+      
       String body3tmp = msgbody.substring(splitspace2, splitspace2 + ss1);
       int splitspace3 = body3tmp.lastIndexOf(" ");
-      body3 = msgbody.substring(splitspace2, splitspace3);
-      body4 = msgbody.substring(splitspace3);
+      body3 = msgbody.substring(splitspace1+ splitspace2+1, splitspace1+splitspace2+splitspace3);
+      body4 = msgbody.substring(splitspace1+splitspace2+ splitspace3+1);
       indexOfBody = 4;
     }
-    else if (msglength < ss3 && msglength > ss2)
+    else if (msglength < ss3 && msglength > ss2)                            //<120-180
     {
       String body1tmp = msgbody.substring(0, ss1);                         //0-60
       int splitspace1 = body1tmp.lastIndexOf(" ");                         //find index of last space char
       body1 = msgbody.substring(0, splitspace1);                           //cut 0-lastspace
       String body2tmp = msgbody.substring(splitspace1, splitspace1 + ss1); // cut last space - lastspace+60
+
       int splitspace2 = body2tmp.lastIndexOf(" ");
-      body2 = msgbody.substring(splitspace1, splitspace2);
+      body2 = msgbody.substring(splitspace1+1, splitspace1+splitspace2);
       // string body3tmp=msgbody.substring(splitspace2,splitspace2+ss1);
       // int splitspace3=body3tmp.lastIndexOf(" ");
-      body3 = msgbody.substring(splitspace2);
+      body3 = msgbody.substring(splitspace1+splitspace2+1);
       indexOfBody = 3;
     }
-    else if (msglength < ss2 && msglength > ss1)
+    else if (msglength < ss2 && msglength > ss1)                            //60-120
     {
       String body1tmp = msgbody.substring(0, ss1);
       int splitspace1 = body1tmp.lastIndexOf(" ");
       body1 = msgbody.substring(0, splitspace1);
-      body2 = msgbody.substring(splitspace1);
+      body2 = msgbody.substring(splitspace1+1);
       indexOfBody = 2;
     }
-    else if (msglength < ss1)
+    else if (msglength < ss1)                                               //<60
     {
       body1 = msgbody;
       // msgg[]={body1};
       // strncpy(msgg,msgbody,0);
       indexOfBody = 1;
     }
-    indexOfBody = (msglength / ss1) + 1;
+    
+      if(body1.substring(0,1)==" ")body1=body1.substring(1);
+      if(body2.substring(0,1)==" ")body2=body2.substring(1);
+      if(body3.substring(0,1)==" ")body3=body3.substring(1);
+      if(body4.substring(0,1)==" ")body4=body4.substring(1);
+    // indexOfBody = (msglength / ss1) + 1;
+    Serial.print("body1 = ");
+    Serial.println(body1);
+    Serial.print("body2 = ");
+    Serial.println(body2);
+    Serial.print("body3 = ");
+    
+    Serial.println(body3);
+    Serial.print("body4 = ");
+    Serial.println(body4);
   }
 };
 
