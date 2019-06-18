@@ -87,7 +87,7 @@ class MyCallbacks : public BLECharacteristicCallbacks
   }
   void splittingMsg()
   {
-    int ss1=60,ss2=ss1*2,ss3=ss1*3,ss4=ss1*4;
+    int ss1 = 60, ss2 = ss1 * 2, ss3 = ss1 * 3, ss4 = ss1 * 4;
     int nl = pushmsg.indexOf(0x0A);
     header = pushmsg.substring(0, nl);
     Serial.print("header");
@@ -99,38 +99,49 @@ class MyCallbacks : public BLECharacteristicCallbacks
     int msglength = msgbody.length();
     Serial.print("msglength = ");
     Serial.println(msglength);
-    if (msglength < 200 && msglength > 150)
+    if (msglength < ss2 && msglength > ss3)
     {
-      body1 = msgbody.substring(0, ss1);
-      body2 = msgbody.substring(ss1, ss2);
-      body3 = msgbody.substring(ss2, ss3);
-      body4 = msgbody.substring(ss3);
-      // msgg[4]={body1,body2,body3,body4};
+      String body1tmp = msgbody.substring(0, ss1);                         //0-60
+      int splitspace1 = body1tmp.lastIndexOf(" ");                         //find index of last space char
+      body1 = msgbody.substring(0, splitspace1);                           //cut 0-lastspace
+      String body2tmp = msgbody.substring(splitspace1, splitspace1 + ss1); // cut last space - lastspace+60
+      int splitspace2 = body2tmp.lastIndexOf(" ");
+      body2 = msgbody.substring(splitspace1, splitspace2);
+      String body3tmp = msgbody.substring(splitspace2, splitspace2 + ss1);
+      int splitspace3 = body3tmp.lastIndexOf(" ");
+      body3 = msgbody.substring(splitspace2, splitspace3);
+      body4 = msgbody.substring(splitspace3);
       indexOfBody = 4;
     }
-    else if (msglength < 150 && msglength > 100)
+    else if (msglength < ss3 && msglength > ss2)
     {
-      body1 = msgbody.substring(0, ss1);
-      body2 = msgbody.substring(ss1, ss2);
-      body3 = msgbody.substring(ss2, ss3);
+      String body1tmp = msgbody.substring(0, ss1);                         //0-60
+      int splitspace1 = body1tmp.lastIndexOf(" ");                         //find index of last space char
+      body1 = msgbody.substring(0, splitspace1);                           //cut 0-lastspace
+      String body2tmp = msgbody.substring(splitspace1, splitspace1 + ss1); // cut last space - lastspace+60
+      int splitspace2 = body2tmp.lastIndexOf(" ");
+      body2 = msgbody.substring(splitspace1, splitspace2);
+      // string body3tmp=msgbody.substring(splitspace2,splitspace2+ss1);
+      // int splitspace3=body3tmp.lastIndexOf(" ");
+      body3 = msgbody.substring(splitspace2);
       indexOfBody = 3;
     }
-    else if (msglength < 120 && msglength > 60)
+    else if (msglength < ss2 && msglength > ss1)
     {
-      String body1tmp=msgbody.substring(0, ss1);
-      int splitspace1=body1tmp.lastIndexOf(" ");
+      String body1tmp = msgbody.substring(0, ss1);
+      int splitspace1 = body1tmp.lastIndexOf(" ");
       body1 = msgbody.substring(0, splitspace1);
       body2 = msgbody.substring(splitspace1);
       indexOfBody = 2;
     }
-    else if (msglength < 60)
+    else if (msglength < ss1)
     {
       body1 = msgbody;
       // msgg[]={body1};
       // strncpy(msgg,msgbody,0);
       indexOfBody = 1;
     }
-    indexOfBody=(msglength/ss1)+1;
+    indexOfBody = (msglength / ss1) + 1;
   }
 };
 
@@ -201,6 +212,7 @@ void loop()
   {
     // do stuff here on connecting
     oldDeviceConnected = deviceConnected;
+
     oled("reconnected!");
     flashInfo = 1;
   }
@@ -210,6 +222,7 @@ void oled(String txt)
 {
   if (flashInfo)
   {
+    display.clearDisplay();
     display.setCursor(0, 0);
     display.print(txt);
     display.display();
