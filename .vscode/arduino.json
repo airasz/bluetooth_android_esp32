@@ -1,5 +1,5 @@
 {
-    "port": "/dev/ttyUSB0",
+    "port": "/dev/ttyUSB1",
     "board": "esp32:esp32:esp32",
     "configuration": "PSRAM=disabled,PartitionScheme=default,CPUFreq=240,FlashMode=dio,FlashFreq=80,FlashSize=2M,UploadSpeed=921600,DebugLevel=none",
     "output": "../build",

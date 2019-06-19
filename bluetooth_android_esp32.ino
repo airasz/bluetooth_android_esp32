@@ -100,7 +100,12 @@ class MyCallbacks : public BLECharacteristicCallbacks
     Serial.print("msglength = ");
     Serial.println(msglength);
     body1="";body2="";body3="";body4="";
-    if (msglength>ss4)msgbody= msgbody.substring(0,ss4-3)+"...";          //truncating if more than 240 character
+    if (msglength>ss4)msgbody= msgbody.substring(0,ss4-4)+"...";          //truncating if more than 240 character
+    Serial.print("msgbody truncated =");
+    Serial.println(msgbody);
+    msglength = msgbody.length();
+    Serial.print("TRUNC msglength = ");
+    Serial.println(msglength);
     if (msglength < ss4 && msglength > ss3)
     {
       String body1tmp = msgbody.substring(0, ss1);                         //0-60
@@ -115,6 +120,7 @@ class MyCallbacks : public BLECharacteristicCallbacks
       int splitspace3 = body3tmp.lastIndexOf(" ");
       body3 = msgbody.substring(splitspace1+ splitspace2+1, splitspace1+splitspace2+splitspace3);
       body4 = msgbody.substring(splitspace1+splitspace2+ splitspace3+1);
+      if(body4.length()>=ss4)body4=body4.substring(0,ss4-4)+"...";
       indexOfBody = 4;
     }
     else if (msglength < ss3 && msglength > ss2)                            //<120-180
